@@ -182,13 +182,14 @@ a.logout:hover { text-decoration:underline; }
     }
     ?>
 
-    <!-- Reports Section -->
+     Reports Section
     <div class="reports">
         <h3>Reports</h3>
         <?php foreach($reports as $rname=>$rpage): ?>
             <a href="<?php echo $rpage; ?>"><?php echo htmlspecialchars($rname); ?></a>
         <?php endforeach; ?>
     </div>
+     
 
 </div>
 
