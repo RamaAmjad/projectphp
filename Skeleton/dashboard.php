@@ -194,6 +194,6 @@ a.logout:hover { text-decoration:underline; }
 </div>
 
 <a class="logout" href="logout.php">Logout</a>
-
+<!-- rose  -->
 </body>
 </html>
