@@ -1,0 +1,36 @@
+<?php
+include 'header.php';
+require 'db.php';
+
+$id = $_GET['id'] ?? 0;
+$res = mysqli_query($conn, "SELECT * FROM author WHERE author_id=$id");
+$author = mysqli_fetch_assoc($res);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $first_name = $_POST['first_name'];
+    $last_name  = $_POST['last_name'];
+    $country    = $_POST['country'];
+    $bio        = $_POST['bio'];
+
+    mysqli_query($conn, "UPDATE author SET first_name='$first_name', last_name='$last_name',
+                     country='$country', bio='$bio' WHERE author_id=$id");
+    header("Location: dashboard.php?table=author");
+    exit;
+}
+?>
+
+<div class="header">
+    <h1>Library Dashboard</h1>
+</div>
+
+<div class="container">
+    <h2>Edit Author</h2>
+    <form method="post">
+        First Name: <input name="first_name" value="<?php echo htmlspecialchars($author['first_name']); ?>"><br>
+        Last Name: <input name="last_name" value="<?php echo htmlspecialchars($author['last_name']); ?>"><br>
+        Country: <input name="country" value="<?php echo htmlspecialchars($author['country']); ?>"><br>
+        Bio: <textarea name="bio" rows="4"><?php echo htmlspecialchars($author['bio']); ?></textarea><br>
+        <button>Save</button>
+    </form>
+</div>
+<a class="logout" href="logout.php">Logout</a>

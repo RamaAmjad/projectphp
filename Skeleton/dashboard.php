@@ -19,10 +19,114 @@ $reports = [
     'Books currently available for borrowing' => 'report_available_books.php'
 ];
 
-// Handle table selection
+$action = $_GET['action'] ?? '';
 $selectedTable = $_GET['table'] ?? '';
+$id = $_GET['id'] ?? '';
+   
 $search = $_GET['search'] ?? '';
+
+// Map table to primary key column
+$column_id_map = [
+    'book'     => 'book_id',
+    'author'   => 'author_id',
+    'borrower' => 'borrower_id',
+    'loan'     => 'loan_id',
+    'sale'     => 'sale_id'
+];
+
+// Handle delete
+if ($action === 'delete' && $selectedTable && $id) {
+    if (isset($column_id_map[$selectedTable])) {
+        $col = $column_id_map[$selectedTable];
+        $id = intval($id);
+        mysqli_query($conn, "DELETE FROM $selectedTable WHERE $col=$id");
+    }
+    header("Location: dashboard.php?table=$selectedTable");
+    exit;
+}
+
+// Handle Add/Edit inline
+$form_data = [];
+$form_action = '';
+if ($action === 'edit' && $selectedTable && $id && isset($column_id_map[$selectedTable])) {
+    $col = $column_id_map[$selectedTable];
+    $id = intval($id);
+    $res = mysqli_query($conn, "SELECT * FROM $selectedTable WHERE $col=$id");
+    $form_data = mysqli_fetch_assoc($res);
+    $form_action = 'edit';
+} elseif ($action === 'add' && $selectedTable) {
+    $form_action = 'add';
+}
+
+// Enable MySQLi exceptions
+mysqli_report(MYSQLI_REPORT_STRICT | MYSQLI_REPORT_ERROR);
+
+$errors = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $selectedTable = $_POST['table'] ?? $selectedTable;
+
+    try {
+        if ($selectedTable === 'book') {
+            $title = $_POST['title'] ?? '';
+            $category = $_POST['category'] ?? '';
+            $type = $_POST['book_type'] ?? '';
+            $price = $_POST['original_price'] ?? '';
+
+            if ($form_action === 'edit') {
+                $id = intval($_POST['id']);
+                mysqli_query($conn, "UPDATE book SET title='$title', category='$category', book_type='$type', original_price='$price' WHERE book_id=$id");
+            } else {
+                mysqli_query($conn, "INSERT INTO book(title, category, book_type, original_price) VALUES('$title', '$category', '$type', '$price')");
+            }
+
+        } elseif ($selectedTable === 'author') {
+            $first = $_POST['first_name'] ?? '';
+            $last  = $_POST['last_name'] ?? '';
+            $country = $_POST['country'] ?? '';
+            $bio = $_POST['bio'] ?? '';
+
+            if ($form_action === 'edit') {
+                $id = intval($_POST['id']);
+                mysqli_query($conn, "UPDATE author SET first_name='$first', last_name='$last', country='$country', bio='$bio' WHERE author_id=$id");
+            } else {
+                mysqli_query($conn, "INSERT INTO author(first_name,last_name,country,bio) VALUES('$first','$last','$country','$bio')");
+            }
+
+        } elseif ($selectedTable === 'borrower') {
+            $first = $_POST['first_name'] ?? '';
+            $last  = $_POST['last_name'] ?? '';
+            $type  = $_POST['type_id'] ?? '';
+            $contact = $_POST['contact_info'] ?? '';
+
+            if ($form_action === 'edit') {
+                $id = intval($_POST['id']);
+                mysqli_query($conn, "UPDATE borrower SET first_name='$first', last_name='$last', type_id='$type', contact_info='$contact' WHERE borrower_id=$id");
+            } else {
+                mysqli_query($conn, "INSERT INTO borrower(first_name,last_name,type_id,contact_info) VALUES('$first','$last','$type','$contact')");
+            }
+        }
+
+        // Success: go back to table view
+        header("Location: dashboard.php?table=$selectedTable");
+        exit;
+
+    } catch (mysqli_sql_exception $e) {
+        // Catch any SQL errors (foreign key, etc.) and show as popup
+        $errors[] = $e->getMessage();
+        echo "<script>alert('Error: ".implode('\\n', array_map('addslashes', $errors))."');</script>";
+    }
+}
+
+
+
+
+
+
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +140,15 @@ body {
     font-family: Arial, sans-serif;
     background-color: #E3F2FD;
 }
+.error-popup {
+    background-color: #f44336;
+    color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
 .header {
     text-align: center;
     padding: 25px 20px;
@@ -138,6 +251,37 @@ a.logout:hover { text-decoration:underline; }
         </form>
     </div>
 
+  <?php if ($form_action === 'add' || $form_action === 'edit'): ?>
+<h3><?php echo $form_action === 'edit' ? 'Edit ' . ucfirst($selectedTable) : 'Add ' . ucfirst($selectedTable); ?></h3>
+<form method="post" style="margin-bottom:20px;">
+    <?php if ($form_action === 'edit'): ?>
+        <input type="hidden" name="id" value="<?php echo $form_data[$column_id_map[$selectedTable]]; ?>">
+    <?php endif; ?>
+
+    <?php if ($selectedTable === 'book'): ?>
+        Title: <input name="title" value="<?php echo $form_data['title'] ?? ''; ?>"><br>
+        Category: <input name="category" value="<?php echo $form_data['category'] ?? ''; ?>"><br>
+        Type: <input name="book_type" value="<?php echo $form_data['book_type'] ?? ''; ?>"><br>
+        Price: <input name="original_price" value="<?php echo $form_data['original_price'] ?? ''; ?>"><br>
+    <?php elseif ($selectedTable === 'author'): ?>
+        First Name: <input name="first_name" value="<?php echo $form_data['first_name'] ?? ''; ?>"><br>
+        Last Name: <input name="last_name" value="<?php echo $form_data['last_name'] ?? ''; ?>"><br>
+        Country: <input name="country" value="<?php echo $form_data['country'] ?? ''; ?>"><br>
+        Bio: <textarea name="bio"><?php echo $form_data['bio'] ?? ''; ?></textarea><br>
+    <?php elseif ($selectedTable === 'borrower'): ?>
+        First Name: <input name="first_name" value="<?php echo $form_data['first_name'] ?? ''; ?>"><br>
+        Last Name: <input name="last_name" value="<?php echo $form_data['last_name'] ?? ''; ?>"><br>
+        Type ID: <input name="type_id" value="<?php echo $form_data['type_id'] ?? ''; ?>"><br>
+        Contact Info: <input name="contact_info" value="<?php echo $form_data['contact_info'] ?? ''; ?>"><br>
+    <?php endif; ?>
+
+    <button><?php echo $form_action === 'edit' ? 'Save' : 'Add'; ?></button>
+    <a href="dashboard.php?table=<?php echo $selectedTable; ?>" style="margin-left:10px;">Cancel</a>
+</form>
+<?php endif; ?>
+
+
+
     <!-- Dynamic Table Display -->
     <?php
     if($selectedTable) {
@@ -155,8 +299,9 @@ a.logout:hover { text-decoration:underline; }
         $result = mysqli_query($conn, $sql);
         if($result && mysqli_num_rows($result)>0){
             if($role=='admin') {
-                echo '<a class="add-btn" href="add_'.$selectedTable.'.php">Add New '.ucfirst($selectedTable).'</a>';
-            }
+    echo '<a class="add-btn" href="dashboard.php?table='.$selectedTable.'&action=add">Add New '.ucfirst($selectedTable).'</a>';
+}
+
             echo '<table><tr>';
             while($fieldinfo=mysqli_fetch_field($result)) {
                 echo '<th>'.htmlspecialchars($fieldinfo->name).'</th>';
@@ -169,8 +314,10 @@ a.logout:hover { text-decoration:underline; }
                 foreach($row as $val) echo '<td>'.htmlspecialchars($val).'</td>';
                 if($role=='admin') {
                     echo '<td>
-                        <a class="edit-btn" href="edit_'.$selectedTable.'.php?id='.$row[array_keys($row)[0]].'">Edit</a>
-                        <a class="delete-btn" href="delete_'.$selectedTable.'.php?id='.$row[array_keys($row)[0]].'" onclick="return confirm(\'Are you sure?\')">Delete</a>
+                        <a class="edit-btn" href="dashboard.php?table='.$selectedTable.'&action=edit&id='.$row[array_keys($row)[0]].'">Edit</a>
+
+                        <a class="delete-btn" href="dashboard.php?table='.$selectedTable.'&action=delete&id='.$row[array_keys($row)[0]].'" onclick="return confirm(\'Are you sure?\')">Delete</a>
+
                     </td>';
                 }
                 echo '</tr>';
