@@ -15,24 +15,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_query($conn, $sql);
 
     header("Location: dashboard.php?table=publisher");
+    exit;
 }
 ?>
 
 <style>
-body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
-h2 { color: #333; }
-form { background: #fff; padding: 20px; border-radius: 8px; width: 350px; }
-input { display: block; width: 100%; margin: 10px 0; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
-button { padding: 10px 15px; border: none; border-radius: 4px; background: #4CAF50; color: white; cursor: pointer; }
-button:hover { background: #45a049; }
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5; 
+    margin: 0;
+}
+
+/* ---------- Form Container ---------- */
+.form-container {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: calc(100vh - 70px);
+}
+
+/* ---------- Form ---------- */
+form { 
+    background: #ffffff; 
+    padding: 35px 30px; 
+    border-radius: 12px; 
+    width: 420px; 
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+form:hover {
+    transform: translateY(-3px);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #222;
+    font-weight: 600;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+}
+
+input {
+    display: block; 
+    width: 95%; 
+    margin-bottom: 20px; 
+    padding: 12px;
+    border-radius: 6px; 
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    background-color: #fff;
+}
+
+input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74,144,226,0.3);
+}
+
+button { 
+    width: 100%;
+    padding: 12px; 
+    border: none; 
+    border-radius: 6px; 
+    background: #4a90e2; 
+    color: white; 
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer; 
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+button:hover { 
+    background: #357ABD; 
+    transform: translateY(-2px);
+}
 </style>
 
-<h2>Add Publisher</h2>
+<div class="form-container">
+    <form method="post">
+        <h2>Add Publisher</h2>
 
-<form method="post">
-    Name:<input name="name" required>
-    City:<input name="city">
-    Country:<input name="country">
-    Contact Info:<input name="contact_info">
-    <button>Add</button>
-</form>
+        <label>Name:</label>
+        <input name="name" required placeholder="Enter publisher name">
+
+        <label>City:</label>
+        <input name="city" placeholder="Enter city">
+
+        <label>Country:</label>
+        <input name="country" placeholder="Enter country">
+
+        <label>Contact Info:</label>
+        <input name="contact_info" placeholder="Enter contact info">
+
+        <button>Add</button>
+    </form>
+</div>
