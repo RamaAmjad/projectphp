@@ -36,10 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $r = mysqli_query($conn, $q);
     $bk = mysqli_fetch_assoc($r);
 
-    header("Location: books.php");
+    header("Location: dashboard.php?table=book");
 }
 
 ?>
+<style>
+body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+h2 { color: #333; }
+form { background: #fff; padding: 20px; border-radius: 8px; width: 350px; }
+input { display: block; width: 100%; margin: 10px 0; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+button { padding: 10px 15px; border: none; border-radius: 4px; background: #9C27B0; color: white; cursor: pointer; }
+button:hover { background: #7b1fa2; }
+</style>
+
+<div class="container">
 <h2>Edit Book</h2>
 <form method="post">
     Title:<input name="title" value="<?php echo $bk['title']; ?>"><br>
@@ -48,3 +58,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     Price:<input name="original_price" value="<?php echo $bk['original_price']; ?>"><br>
     <button>Save</button>
 </form>
+</div>

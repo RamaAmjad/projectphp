@@ -19,9 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="header">
-    <h1>Library Dashboard</h1>
-</div>
+<style>
+body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+h2 { color: #333; }
+form { background: #fff; padding: 20px; border-radius: 8px; width: 350px; }
+input { display: block; width: 100%; margin: 10px 0; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+button { padding: 10px 15px; border: none; border-radius: 4px; background: #9C27B0; color: white; cursor: pointer; }
+button:hover { background: #7b1fa2; }
+</style>
 
 <div class="container">
     <h2>Edit Borrower</h2>
@@ -33,4 +38,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button>Save</button>
     </form>
 </div>
-<a class="logout" href="logout.php">Logout</a>

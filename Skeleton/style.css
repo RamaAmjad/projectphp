@@ -1,0 +1,197 @@
+/* ---------- GLOBAL ---------- */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f4f5f7;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table th {
+  background: #4a69bd;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+table tr:hover td {
+  background: #f1f5ff;
+}
+
+/* ---------- DASHBOARD STRUCTURE ---------- */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+  width: 250px;
+  background: #2d3436;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin-bottom: 25px;
+  color: #00cec9;
+}
+
+.sidebar h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #81ecec;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sidebar ul li a {
+  display: block;
+  padding: 10px;
+  margin-bottom: 5px;
+  background: #636e72;
+  border-radius: 5px;
+  transition: 0.3s;
+  color: white;
+}
+
+.sidebar ul li a:hover {
+  background: #00cec9;
+}
+
+.logout-btn {
+  margin-top: auto;
+  display: block;
+  padding: 10px;
+  text-align: center;
+  background: #d63031;
+  border-radius: 5px;
+  color: white;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #ff7675;
+}
+
+/* ---------- MAIN CONTENT ---------- */
+.main-content {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+.main-content h1 {
+  margin-top: 0;
+}
+
+/* ---------- ABOUT BOX ---------- */
+.about-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ---------- REPORTS ---------- */
+.reports-box {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
+}
+
+.report-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.report-links a {
+  padding: 12px;
+  background: #0984e3;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.report-links a:hover {
+  background: #74b9ff;
+}
+
+/* ---------- SEARCH BAR ---------- */
+.table-view-section {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.table-view-section input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+}
+
+.table-view-section button {
+  padding: 10px 20px;
+  background: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.table-view-section button:hover {
+  background: #a29bfe;
+}
+
+/* ---------- ADD BUTTON ---------- */
+.add-btn {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #00b894;
+  color: white;
+  border-radius: 5px;
+  margin: 10px 0;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  background: #55efc4;
+}
+
+/* ---------- ACTION LINKS ---------- */
+td a {
+  color: #0984e3;
+  font-weight: 600;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+

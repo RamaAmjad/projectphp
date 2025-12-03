@@ -1,13 +1,14 @@
-<?php require 'db.php';
-session_start();
+<?php
+require 'db.php';
 $id = $_GET['id'];
 
-/*
-$sql_sale = "DELETE FROM sale WHERE book_id = $id";
-mysqli_query($conn, $sql_sale);
-*/
+$sql = "DELETE FROM book WHERE book_id = $id";
 
+if (!mysqli_query($conn, $sql)) {
+    $error = mysqli_error($conn);
+    header("Location: dashboard.php?table=book&error=" . urlencode("Cannot delete: book has sales or loans."));
+    exit;
+}
 
-mysqli_query($conn, "DELETE FROM book WHERE book_id=$id");
-header("Location: books.php");
-?>
+header("Location: dashboard.php?table=book&msg=Deleted");
+exit;

@@ -15,6 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
+<style>
+body { font-family: Arial, sans-serif; background: #eef2f3; padding: 20px; }
+.header h1 { color: #333; }
+.container { background: #fff; padding: 20px; border-radius: 8px; width: 350px; }
+input { display: block; width: 100%; margin: 10px 0; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+textarea { display: block; width: 100%; margin: 10px 0; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+button { padding: 10px 15px; border: none; border-radius: 4px; background: #3F51B5; color: white; cursor: pointer; }
+button:hover { background: #3949ab; }
+.logout { display: inline-block; margin-top: 20px; color: #f44336; text-decoration: none; }
+.logout:hover { text-decoration: underline; }
+</style>
+
 <div class="header">
     <h1>Library Dashboard</h1>
 </div>
