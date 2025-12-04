@@ -1,10 +1,21 @@
 <?php
-require 'db.php';
 session_start();
+require 'db.php';
 
-$id = $_GET['id'];
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$id = $_GET['id'] ?? 0;
+$id = intval($id);
+
 
 mysqli_query($conn, "DELETE FROM sale WHERE sale_id=$id");
 
-header("Location: dashboard.php?table=sale&msg=Deleted");
+echo "<script>
+        alert('✅ Sale deleted successfully.');
+        window.location.href='dashboard.php?table=sale';
+      </script>";
+exit;
 ?>

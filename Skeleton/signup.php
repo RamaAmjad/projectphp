@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_execute($stmt);
 
     // Redirect after successful signup
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 ?>

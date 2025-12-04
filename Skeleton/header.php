@@ -66,12 +66,10 @@ $role = $_SESSION['role'];
 
 
 <?php
-// تحقق إذا الجلسة بدأت مسبقًا
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// تحقق إذا المستخدم مسجل دخول
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -82,7 +80,6 @@ $role = $_SESSION['role'];
 ?>
 
 <style>
-/* ---------- HEADER ---------- */
 .header-bar {
     background: #fff;
     padding: 15px 25px;

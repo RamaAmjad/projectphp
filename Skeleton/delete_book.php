@@ -1,14 +1,35 @@
 <?php
+session_start();
 require 'db.php';
-$id = $_GET['id'];
 
-$sql = "DELETE FROM book WHERE book_id = $id";
-
-if (!mysqli_query($conn, $sql)) {
-    $error = mysqli_error($conn);
-    header("Location: dashboard.php?table=book&error=" . urlencode("Cannot delete: book has sales or loans."));
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
     exit;
 }
 
-header("Location: dashboard.php?table=book&msg=Deleted");
+$id = $_GET['id'] ?? 0;
+$id = intval($id);
+
+// Check if book is linked to loans or sales
+$linkedLoan = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM loan WHERE book_id=$id"))['cnt'];
+$linkedSale = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM sale WHERE book_id=$id"))['cnt'];
+
+if($linkedLoan > 0 || $linkedSale > 0){
+    // Cannot delete, show alert
+    echo "<script>
+            alert('❌ Cannot delete this book because it is linked to sales or loans.');
+            window.history.back();
+          </script>";
+    exit;
+}
+
+// Safe to delete
+mysqli_query($conn, "DELETE FROM book WHERE book_id=$id");
+
+// Show success alert
+echo "<script>
+        alert('✅ Book deleted successfully.');
+        window.location.href='dashboard.php?table=book';
+      </script>";
 exit;
+?>

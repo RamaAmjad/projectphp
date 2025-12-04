@@ -60,7 +60,7 @@ function esc($conn, $v){ return mysqli_real_escape_string($conn,(string)$v); }
         <li><a href="dashboard.php?mode=about">About Our System</a></li>
     </ul>
 
-    <a class="logout-btn" href="logout.php">Logout</a>
+    <a class="logout-btn" href="index.php">Logout</a>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -259,7 +259,6 @@ switch($r) {
     case 'borrower_history':
         $borrower_id = $_GET['borrower_id'] ?? '';
         if(!$borrower_id){
-            // قائمة منسدلة بأسماء المستعيرين
             $borrowers = fetchAll($conn,"SELECT borrower_id, first_name, last_name FROM borrower ORDER BY first_name");
             echo '<form method="get">
                     <input type="hidden" name="mode" value="reports">
